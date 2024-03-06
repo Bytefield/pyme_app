@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:pyme_app/screen_controller.dart';
+import 'package:pyme_app/src/sample_feature/sample_item.dart';
+import 'package:realm/realm.dart';
 
-void main() {
-  runApp(const MainApp());
-}
+import 'src/app.dart';
+import 'src/settings/settings_controller.dart';
+import 'src/settings/settings_service.dart';
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+void main() async {
+  final Realm realm = Realm(Configuration.local([SampleItem.schema]));
+  final allItems = realm.all<SampleItem>();
 
-  @override
-  Widget build(context) {
-    return const ScreenController();
-  }
+  final settingsController = SettingsController(SettingsService());
+  await settingsController.loadSettings();
+
+  runApp(
+    MyApp(
+      settingsController: settingsController,
+      items: allItems,
+    ),
+  );
 }

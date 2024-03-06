@@ -1,6 +1,3 @@
-# My ignores
-.env
-
 # Miscellaneous
 *.class
 *.log
