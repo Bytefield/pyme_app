@@ -14,7 +14,6 @@ class ListBloc {
   ListBloc({required this.items}) : _realm = items.realm;
 
   void addNewItem() {
-    print("items in realm $items.length");
     _realm.write(() => _realm.add(SampleItem(1 + (items.lastOrNull?.id ?? 0))));
   }
 }
