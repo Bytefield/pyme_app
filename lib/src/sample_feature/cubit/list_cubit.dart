@@ -15,4 +15,11 @@ class ListCubit extends Cubit<List<SampleItem>> {
     });
     emit(_realm.all<SampleItem>().toList());
   }
+
+  void deleteItem(SampleItem item) {
+    _realm.write(() {
+      _realm.delete(item);
+    });
+    emit(_realm.all<SampleItem>().toList());
+  }
 }

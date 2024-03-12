@@ -1,6 +1,7 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:pyme_app/src/sample_feature/cubit/list_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pyme_app/src/sample_feature/sample_item.dart';
@@ -85,7 +86,10 @@ class SampleItemListView extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 final item = bloc.items[index];
 
-                return ListTile(
+                return Dismissible(
+                  key: Key(item.id.toString()),
+                  onDismissed: (_) => bloc.deleteItem(item),
+                  child: ListTile(
                     title: Text('SampleItem ${item.id}'),
                     leading: const CircleAvatar(
                       // Display the Flutter Logo image asset.
@@ -100,7 +104,9 @@ class SampleItemListView extends StatelessWidget {
                         context,
                         SampleItemDetailsView.routeName,
                       );
-                    });
+                    },
+                  ),
+                );
               },
             );
           },
