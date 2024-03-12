@@ -8,7 +8,7 @@ import 'src/settings/settings_service.dart';
 
 void main() async {
   final Realm realm = Realm(Configuration.local([SampleItem.schema]));
-  final allItems = realm.all<SampleItem>();
+  final items = realm.all<SampleItem>();
 
   final settingsController = SettingsController(SettingsService());
   await settingsController.loadSettings();
@@ -16,7 +16,8 @@ void main() async {
   runApp(
     MyApp(
       settingsController: settingsController,
-      items: allItems,
+      items: items,
+      realm: realm,
     ),
   );
 }

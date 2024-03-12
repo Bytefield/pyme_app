@@ -1,24 +1,36 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
-import 'package:realm/realm.dart';
+import 'package:pyme_app/src/sample_feature/cubit/list_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pyme_app/src/sample_feature/sample_item.dart';
 
 import '../settings/settings_view.dart';
-import 'sample_item.dart';
+// import 'sample_item.dart';
 import 'sample_item_details_view.dart';
 
-class ListBloc {
-  final RealmResults<SampleItem> items;
-  final Realm _realm;
+// class ListBloc {
+//   final RealmResults<SampleItem> items;
+//   final Realm _realm;
 
-  ListBloc({required this.items}) : _realm = items.realm;
+//   ListBloc({required this.items}) : _realm = items.realm;
 
-  void addNewItem() {
-    _realm.write(() => _realm.add(SampleItem(1 + (items.lastOrNull?.id ?? 0))));
-  }
-}
+//   void addNewItem() {
+//     _realm.write(() => _realm.add(SampleItem(1 + (items.lastOrNull?.id ?? 0))));
+//   }
+// }
 
-/// Displays a list of SampleItems.
+// class ListCubit {
+//   final RealmResults<SampleItem> items;
+//   final Realm _realm;
+
+//   ListCubit({required this.items}) : _realm = items.realm;
+
+//   void addNewItem() {
+//     _realm.write(() => _realm.add(SampleItem(1 + (items.lastOrNull?.id ?? 0))));
+//   }
+// }
+
 class SampleItemListView extends StatelessWidget {
   const SampleItemListView({
     super.key,
@@ -27,7 +39,7 @@ class SampleItemListView extends StatelessWidget {
 
   static const routeName = '/';
 
-  final ListBloc bloc;
+  final ListCubit bloc;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +58,6 @@ class SampleItemListView extends StatelessWidget {
           ),
         ],
       ),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           bloc.addNewItem();
@@ -60,9 +71,11 @@ class SampleItemListView extends StatelessWidget {
       // In contrast to the default ListView constructor, which requires
       // building all Widgets up front, the ListView.builder constructor lazily
       // builds Widgets as they’re scrolled into view.
-      body: StreamBuilder<Object>(
-          stream: bloc.items.changes,
-          builder: (context, snapshot) {
+
+      body: BlocProvider<ListCubit>.value(
+        value: bloc,
+        child: BlocBuilder<ListCubit, List<SampleItem>>(
+          builder: (context, state) {
             return ListView.builder(
               // Providing a restorationId allows the ListView to restore the
               // scroll position when a user leaves and returns to the app after it
@@ -90,7 +103,9 @@ class SampleItemListView extends StatelessWidget {
                     });
               },
             );
-          }),
+          },
+        ),
+      ),
     );
   }
 }

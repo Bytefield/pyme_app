@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pyme_app/src/sample_feature/cubit/list_cubit.dart';
 import 'package:pyme_app/src/sample_feature/sample_item.dart';
 import 'package:realm/realm.dart';
 
@@ -15,10 +16,12 @@ class MyApp extends StatelessWidget {
     super.key,
     required this.settingsController,
     required this.items,
+    required this.realm,
   });
 
   final SettingsController settingsController;
   final RealmResults<SampleItem> items;
+  final Realm realm;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +80,8 @@ class MyApp extends StatelessWidget {
                     return const SampleItemDetailsView();
                   case SampleItemListView.routeName:
                   default:
-                    return SampleItemListView(bloc: ListBloc(items: items));
+                    return SampleItemListView(
+                        bloc: ListCubit(realm, items: items));
                 }
               },
             );
